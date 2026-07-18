@@ -1,0 +1,26 @@
+services:
+  quantum:
+    # shortcut: upstream image pinned (stable) — upgrade: build from viewport-corp/filebrowser fork via Dokploy
+    image: gtsteffaniak/filebrowser:stable
+    user: "0:0"
+    restart: unless-stopped
+    volumes:
+      - /srv/viewport/services/filebrowser/config.yaml:/home/filebrowser/data/config.yaml
+      - /srv/viewport/services/filebrowser/db:/home/filebrowser/db
+      # Sam's window: whole VPS read-only + one writable zone
+      - /:/host:ro
+      - /srv/viewport:/host-rw/srv-viewport
+      # secret masking at MOUNT level (empty dir over every credential location, both views)
+      - /srv/viewport/services/filebrowser/empty:/host/srv/viewport/secrets:ro
+      - /srv/viewport/services/filebrowser/empty:/host/root/.ssh:ro
+      - /srv/viewport/services/filebrowser/empty:/host/root/.claude:ro
+      - /srv/viewport/services/filebrowser/empty:/host/home/openclaw/.openclaw:ro
+      - /srv/viewport/services/filebrowser/empty:/host/srv/viewport/runtime/hermes/secrets:ro
+      - /srv/viewport/services/filebrowser/empty:/host/srv/viewport/runtime/hermes-viewport-new/secrets:ro
+      - /srv/viewport/services/filebrowser/empty:/host/srv/viewport/runtime/hermes-vinay-patil/secrets:ro
+      - /srv/viewport/services/filebrowser/empty:/host-rw/srv-viewport/secrets:ro
+    networks:
+      - dokploy-network
+networks:
+  dokploy-network:
+    external: true
