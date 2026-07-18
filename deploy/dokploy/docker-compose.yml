@@ -1,9 +1,17 @@
 services:
   quantum:
     # shortcut: upstream image pinned (stable) — upgrade: build from viewport-corp/filebrowser fork via Dokploy
-    image: gtsteffaniak/filebrowser:stable
+    image: ghcr.io/gtsteffaniak/filebrowser:stable
     user: "0:0"
     restart: unless-stopped
+    environment:
+      # value injected via Dokploy environment (compose.saveEnvironment); source of truth: platformx.env
+      - FILEBROWSER_ADMIN_PASSWORD=${FILEBROWSER_ADMIN_PASSWORD}
+    ports:
+      # host-local only: the PUBLIC edge traefik (host process, file provider) proxies files.viewport.llc
+      # -> 127.0.0.1:8095 behind authentik@file (viewport-files.yml). Not 0.0.0.0: that rule covers
+      # container-traefik reachability; here the edge runs on the host and 127.0.0.1 is reachable (verified).
+      - "127.0.0.1:8095:80"
     volumes:
       - /srv/viewport/services/filebrowser/config.yaml:/home/filebrowser/data/config.yaml
       - /srv/viewport/services/filebrowser/db:/home/filebrowser/db
@@ -20,7 +28,7 @@ services:
       - /srv/viewport/services/filebrowser/empty:/host/srv/viewport/runtime/hermes-vinay-patil/secrets:ro
       - /srv/viewport/services/filebrowser/empty:/host-rw/srv-viewport/secrets:ro
     networks:
-      - dokploy-network
+      - dokploy-network-new
 networks:
-  dokploy-network:
+  dokploy-network-new:
     external: true
