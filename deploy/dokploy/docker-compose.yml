@@ -1,7 +1,8 @@
 services:
   quantum:
-    # shortcut: upstream image pinned (stable) — upgrade: build from viewport-corp/filebrowser fork via Dokploy
-    image: ghcr.io/gtsteffaniak/filebrowser:stable
+    # built from viewport-corp/filebrowser (fork, upstream remote set) @ tag v1.4.0-stable (4072e46e)
+    # rebuild: cd /srv/viewport/forks/filebrowser && docker build -t viewport-filebrowser:v1.4.0-fork -f _docker/Dockerfile .
+    image: viewport-filebrowser:v1.4.0-fork
     user: "0:0"
     restart: unless-stopped
     environment:
