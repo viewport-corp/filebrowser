@@ -4,7 +4,13 @@ server:
   database: /home/filebrowser/db/database.db
   sources:
     - path: /host
+      config:
+        defaultEnabled: true
+        defaultUserScope: "/"
     - path: /host-rw/srv-viewport
+      config:
+        defaultEnabled: true
+        defaultUserScope: "/"
 auth:
   methods:
     password:
