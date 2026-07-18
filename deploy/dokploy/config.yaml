@@ -1,0 +1,13 @@
+server:
+  port: 80
+  baseURL: "/"
+  database: /home/filebrowser/db/database.db
+  sources:
+    - path: /host
+    - path: /host-rw/srv-viewport
+auth:
+  methods:
+    password:
+      enabled: true
+frontend:
+  name: "Viewport VPS"
