@@ -1,0 +1,19 @@
+http:
+  routers:
+    files:
+      rule: "Host(`files.viewport.llc`)"
+      entryPoints:
+        - websecure
+      service: files
+      # authentik@file NOT enabled yet: shared outpost 172.31.9.4:9000 is dead (edge IP-disease, owned by
+      # the SSO WP0 lane). Quantum password auth + HTTPS + login rate-limit hold the line; add the
+      # middleware line back when the outpost is fixed. (viewport-ops#479)
+      tls: {}
+
+  services:
+    files:
+      loadBalancer:
+        passHostHeader: true
+        servers:
+          # quantum container published host-local (127.0.0.1:8095) by Dokploy compose E2v2JwUKKJxYrgw5rvc4b
+          - url: "http://127.0.0.1:8095"
